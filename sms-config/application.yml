@@ -1,0 +1,29 @@
+# ============================================================
+# Shared configuration served by Config Server to ALL services
+# File: ~/sms-config/application.yml
+# ============================================================
+
+# JWT Secret — MUST be identical in auth-service and api-gateway
+# Minimum 32 characters (256-bit) for HS256 algorithm
+jwt:
+  secret: sms-super-secret-jwt-key-2024-capstone-project-secure
+  expiration: 86400000   # 24 hours in milliseconds
+
+# Eureka — shared default (services may override in their own application.yml)
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+
+# Actuator — expose health and info for all services
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
