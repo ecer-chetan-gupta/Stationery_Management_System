@@ -1,2 +1,26 @@
+# Project ignores
 Agent.md
 Stationery_Management_System_Project_Blueprint.pdf
+
+# Maven build outputs
+**/target/
+*.jar
+*.war
+*.zip
+*.tar.gz
+*.rar
+
+# Node / React dependencies and builds
+**/node_modules/
+**/dist/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and editors
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db

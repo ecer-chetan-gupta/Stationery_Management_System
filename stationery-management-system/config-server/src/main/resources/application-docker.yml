@@ -1,0 +1,14 @@
+# ============================================================
+# Docker profile: switches config-server to native file mode
+# Activated by: SPRING_PROFILES_ACTIVE=docker
+# Reads config from classpath:/config/ (baked into the image)
+# ============================================================
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config/
+        # Disable git backend when docker profile is active
+        git:
+          uri: ""

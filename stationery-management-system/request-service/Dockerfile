@@ -1,4 +1,4 @@
-# ── Auth Service Dockerfile ────────────────────────────────────────────────────
+# ── Request Service Dockerfile ─────────────────────────────────────────────────
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
@@ -10,11 +10,11 @@ COPY auth-service/pom.xml auth-service/pom.xml
 COPY inventory-service/pom.xml inventory-service/pom.xml
 COPY request-service/pom.xml request-service/pom.xml
 
-RUN mvn -pl auth-service dependency:go-offline -B --no-transfer-progress 2>/dev/null || true
+RUN mvn -pl request-service dependency:go-offline -B --no-transfer-progress 2>/dev/null || true
 
-COPY auth-service/src auth-service/src
+COPY request-service/src request-service/src
 
-RUN mvn -pl auth-service package -DskipTests -B --no-transfer-progress
+RUN mvn -pl request-service package -DskipTests -B --no-transfer-progress
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
@@ -22,11 +22,11 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-COPY --from=build /app/auth-service/target/*.jar app.jar
+COPY --from=build /app/request-service/target/*.jar app.jar
 
-EXPOSE 8081
+EXPOSE 8083
 
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 \
-  CMD wget -qO- http://localhost:8081/actuator/health | grep -q '"status":"UP"' || exit 1
+  CMD wget -qO- http://localhost:8083/actuator/health | grep -q '"status":"UP"' || exit 1
 
 ENTRYPOINT ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "app.jar"]

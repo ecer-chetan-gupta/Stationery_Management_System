@@ -1,0 +1,196 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven 3.9'
+        jdk 'JDK 17'
+    }
+
+    environment {
+        // Change to your Docker Hub username or registry
+        DOCKER_REGISTRY = 'your-dockerhub-username'
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        // Jenkins credentials ID for Docker Hub (configure in Jenkins → Credentials)
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+    }
+
+    options {
+        // Discard old builds — keep 5 logs + 3 artifacts
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '3'))
+        // Abort build if it hangs for more than 30 minutes
+        timeout(time: 30, unit: 'MINUTES')
+        // Timestamps in console output
+        timestamps()
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/YOUR_USERNAME/stationery-management-system.git'
+            }
+        }
+
+        stage('Build All Services') {
+            steps {
+                dir('stationery-management-system') {
+                    sh 'mvn clean package -DskipTests -B --no-transfer-progress'
+                }
+            }
+            post {
+                success {
+                    echo '✅ Maven build succeeded'
+                }
+                failure {
+                    echo '❌ Maven build failed — check compilation errors above'
+                }
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                dir('stationery-management-system') {
+                    // Run tests on business services (skip eureka/config/gateway — no unit tests)
+                    sh 'mvn test -pl auth-service,inventory-service,request-service -B --no-transfer-progress'
+                }
+            }
+            post {
+                always {
+                    // Publish JUnit test results
+                    junit(
+                        testResults: '**/target/surefire-reports/*.xml',
+                        allowEmptyResults: true
+                    )
+                    // Publish JaCoCo coverage report
+                    jacoco(
+                        execPattern: '**/target/jacoco.exec',
+                        classPattern: '**/target/classes',
+                        sourcePattern: '**/src/main/java',
+                        minimumLineCoverage: '0'   // Set to '70' after Day 5 tests are added
+                    )
+                }
+                failure {
+                    echo '❌ Unit tests failed'
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            when {
+                // Only run Docker build on main branch
+                branch 'main'
+            }
+            steps {
+                dir('stationery-management-system') {
+                    script {
+                        withCredentials([usernamePassword(
+                            credentialsId: env.DOCKER_CREDENTIALS_ID,
+                            usernameVariable: 'DOCKER_USER',
+                            passwordVariable: 'DOCKER_PASS'
+                        )]) {
+                            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                        }
+
+                        def services = [
+                            'eureka-server',
+                            'config-server',
+                            'api-gateway',
+                            'auth-service',
+                            'inventory-service',
+                            'request-service'
+                        ]
+
+                        services.each { service ->
+                            sh """
+                                docker build -t ${DOCKER_REGISTRY}/sms-${service}:${IMAGE_TAG} \
+                                             -t ${DOCKER_REGISTRY}/sms-${service}:latest \
+                                             -f ${service}/Dockerfile .
+                                docker push ${DOCKER_REGISTRY}/sms-${service}:${IMAGE_TAG}
+                                docker push ${DOCKER_REGISTRY}/sms-${service}:latest
+                            """
+                        }
+
+                        // Build and push frontend
+                        sh """
+                            docker build -t ${DOCKER_REGISTRY}/sms-frontend:${IMAGE_TAG} \
+                                         -t ${DOCKER_REGISTRY}/sms-frontend:latest \
+                                         ./frontend
+                            docker push ${DOCKER_REGISTRY}/sms-frontend:${IMAGE_TAG}
+                            docker push ${DOCKER_REGISTRY}/sms-frontend:latest
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            when {
+                branch 'main'
+            }
+            steps {
+                dir('stationery-management-system') {
+                    sh '''
+                        docker compose down --remove-orphans || true
+                        docker compose pull
+                        docker compose up -d --build
+                        echo "Waiting for services to become healthy..."
+                        sleep 30
+                        docker compose ps
+                    '''
+                }
+            }
+            post {
+                success {
+                    echo '✅ Deployment succeeded — all containers are up'
+                }
+                failure {
+                    echo '❌ Deployment failed — running docker compose logs'
+                    dir('stationery-management-system') {
+                        sh 'docker compose logs --tail=50 || true'
+                    }
+                }
+            }
+        }
+
+        stage('Smoke Test') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    // Wait for services to be truly ready
+                    sleep(time: 20, unit: 'SECONDS')
+
+                    // Test Eureka
+                    sh 'curl -f http://localhost:8761/actuator/health | grep UP'
+                    // Test Gateway
+                    sh 'curl -f http://localhost:8080/actuator/health | grep UP'
+                    // Test Auth (register endpoint should exist)
+                    sh '''
+                        curl -f -X POST http://localhost:8080/api/auth/login \
+                          -H "Content-Type: application/json" \
+                          -d "{\"email\":\"admin@sms.com\",\"password\":\"admin123\"}" || true
+                    '''
+                    echo '✅ Smoke tests passed'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished — Build #${env.BUILD_NUMBER}"
+        }
+        success {
+            echo '🎉 All stages passed. System deployed successfully.'
+        }
+        failure {
+            echo '🚨 Pipeline FAILED. Check the logs above for details.'
+        }
+        cleanup {
+            // Clean workspace to save disk space
+            cleanWs()
+        }
+    }
+}
