@@ -20,7 +20,7 @@ function App() {
       <Router>
         <div className="min-h-screen bg-transparent flex flex-col">
           <Navbar />
-          
+
           <main className="flex-1 pb-16">
             <Routes>
               {/* Public Routes */}
@@ -59,7 +59,7 @@ function App() {
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="dark"
+            theme="light"
           />
         </div>
       </Router>

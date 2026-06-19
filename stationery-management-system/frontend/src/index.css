@@ -5,7 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --font-sans: 'Outfit', system-ui, -apple-system, sans-serif;
   font-family: var(--font-sans);
@@ -14,74 +13,284 @@
 body {
   margin: 0;
   font-family: var(--font-sans);
-  background-color: #0d0e12;
-  color: #f3f4f6;
+  background-color: #eef2f7;
+  color: #334155;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(67, 117, 255, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(170, 59, 255, 0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(186, 230, 253, 0.45) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(221, 214, 254, 0.4) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(244, 214, 254, 0.35) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(204, 251, 241, 0.35) 0px, transparent 50%);
   background-attachment: fixed;
   min-height: 100vh;
 }
 
-/* Glassmorphism utility */
-.glass-panel {
-  background: rgba(18, 20, 29, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Global Text Colors Overrides for Soothing Light Mode Readability */
+h1, h2, h3, h4, h5, h6, .text-white {
+  color: #1e293b !important;
 }
 
+.text-gray-400 {
+  color: #64748b !important;
+}
+
+.text-gray-300 {
+  color: #475569 !important;
+}
+
+.text-gray-200 {
+  color: #334155 !important;
+}
+
+.text-gray-100 {
+  color: #1e293b !important;
+}
+
+.text-gray-500 {
+  color: #64748b !important;
+}
+
+.text-primary-400 {
+  color: #4f46e5 !important; /* Soft indigo instead of light-blue */
+}
+
+.hover\:text-primary-300:hover {
+  color: #3730a3 !important;
+}
+
+/* Claymorphism Panel / Header */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 
+    0 8px 30px rgba(100, 116, 139, 0.06), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.9) !important;
+  border-radius: 0 0 24px 24px;
+}
+
+/* Claymorphism Card: Pillowy, Soft, 3D */
 .glass-card {
-  background: rgba(23, 26, 38, 0.6);
+  background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 
+    8px 8px 20px rgba(166, 180, 200, 0.22), 
+    -8px -8px 20px rgba(255, 255, 255, 0.85),
+    inset 5px 5px 10px rgba(255, 255, 255, 0.9),
+    inset -5px -5px 10px rgba(166, 180, 200, 0.08) !important;
+  border-radius: 24px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .glass-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(67, 117, 255, 0.25);
-  box-shadow: 0 12px 40px 0 rgba(67, 117, 255, 0.15);
+  transform: translateY(-4px) !important;
+  box-shadow: 
+    12px 12px 28px rgba(166, 180, 200, 0.3), 
+    -12px -12px 28px rgba(255, 255, 255, 0.95),
+    inset 7px 7px 14px rgba(255, 255, 255, 0.95),
+    inset -7px -7px 14px rgba(166, 180, 200, 0.12) !important;
 }
 
+/* Claymorphism Input: Sunken / Debossed */
 .glass-input {
-  background: rgba(10, 11, 16, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  transition: all 0.2s ease;
+  background: rgba(241, 245, 249, 0.8) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 
+    inset 2px 2px 5px rgba(166, 180, 200, 0.22),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.9) !important;
+  color: #1e293b !important;
+  border-radius: 14px !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-input::placeholder {
+  color: #94a3b8 !important;
 }
 
 .glass-input:focus {
-  outline: none;
-  border-color: #4375ff;
-  box-shadow: 0 0 0 2px rgba(67, 117, 255, 0.25);
+  outline: none !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 
+    inset 1px 1px 3px rgba(166, 180, 200, 0.1),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.9),
+    0 0 0 4px rgba(99, 102, 241, 0.18) !important;
+}
+
+select.glass-input option {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+/* Claymorphic Buttons - Elevated, Bouncy Pills */
+.bg-primary-600 {
+  background: #6366f1 !important; /* Soft Indigo */
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 
+    4px 4px 12px rgba(99, 102, 241, 0.28),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.45),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.hover\:bg-primary-500:hover, .bg-primary-600:hover {
+  background: #4f46e5 !important;
+  box-shadow: 
+    6px 6px 16px rgba(99, 102, 241, 0.38),
+    inset 3px 3px 6px rgba(255, 255, 255, 0.5),
+    inset -3px -3px 6px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+.bg-primary-600:active {
+  transform: translateY(1px);
+  box-shadow: 
+    2px 2px 6px rgba(99, 102, 241, 0.28),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.45),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Dark Mode Utilities Global Overrides to Light Clay */
+.bg-gray-950, [class*="bg-gray-950/"], [class*="bg-gray-900/"] {
+  background-color: rgba(241, 245, 249, 0.6) !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    inset 1px 1px 3px rgba(166, 180, 200, 0.15),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.9),
+    2px 2px 6px rgba(166, 180, 200, 0.06) !important;
+  border-radius: 14px;
+}
+
+.bg-gray-900 {
+  background-color: #f8fafc !important;
+}
+
+.hover\:bg-gray-900\/80:hover {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+  box-shadow: 
+    inset 1px 1px 3px rgba(166, 180, 200, 0.1),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.9),
+    3px 3px 10px rgba(166, 180, 200, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+.bg-black {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+}
+
+.border-gray-800, [class*="border-gray-800/"], .border-gray-900, [class*="border-gray-900/"], .border-gray-850 {
+  border-color: rgba(148, 163, 184, 0.12) !important;
+}
+
+/* Claymorphic Badges and Action Buttons overrides */
+
+/* Green Status / Approve */
+.bg-green-950\/40, .bg-green-600\/20 {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    2px 2px 6px rgba(16, 185, 129, 0.12),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+    inset -1px -1px 2px rgba(6, 95, 70, 0.1) !important;
+}
+
+.text-green-400 {
+  color: #047857 !important;
+}
+
+.border-green-800 {
+  border-color: rgba(52, 211, 153, 0.2) !important;
+}
+
+/* Red Status / Reject / Danger */
+.bg-red-950\/40, .bg-red-600\/20, .bg-red-650 {
+  background-color: #ffe4e6 !important;
+  color: #9f1239 !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    2px 2px 6px rgba(239, 68, 68, 0.12),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+    inset -1px -1px 2px rgba(159, 18, 57, 0.1) !important;
+}
+
+.hover\:bg-red-600:hover, .bg-red-650:hover {
+  background-color: #fda4af !important;
+}
+
+.text-red-400 {
+  color: #b91c1c !important;
+}
+
+.border-red-800 {
+  border-color: rgba(244, 63, 94, 0.2) !important;
+}
+
+/* Amber Status / Warning */
+.bg-amber-950\/40, .bg-amber-600\/20 {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    2px 2px 6px rgba(245, 158, 11, 0.12),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+    inset -1px -1px 2px rgba(146, 64, 14, 0.1) !important;
+}
+
+.text-amber-400 {
+  color: #d97706 !important;
+}
+
+.border-amber-800 {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Admin / Purple Badges */
+.bg-purple-900\/40, .bg-blue-900\/40 {
+  background-color: #f3e8ff !important;
+  color: #6b21a8 !important;
+  border: 2px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    2px 2px 6px rgba(168, 85, 247, 0.12),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+    inset -1px -1px 2px rgba(107, 33, 168, 0.1) !important;
+}
+
+/* Modal Backdrop Reset */
+.fixed.inset-0.bg-black\/60 {
+  background-color: rgba(15, 23, 42, 0.4) !important;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0e12;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: rgba(166, 180, 200, 0.4);
+  border: 2px solid #f1f5f9;
+  border-radius: 6px;
+  box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(67, 117, 255, 0.4);
+  background: rgba(99, 102, 241, 0.4);
 }
 
 /* Custom transitions and keyframes */
 @keyframes pulse-slow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
 }
 
 .animate-pulse-slow {
