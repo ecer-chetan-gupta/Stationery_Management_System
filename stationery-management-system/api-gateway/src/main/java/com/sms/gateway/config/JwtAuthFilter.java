@@ -29,10 +29,10 @@ import java.util.List;
  * JWT Authentication Filter for the API Gateway.
  *
  * This reactive gateway filter intercepts every request:
- *   - If the path starts with /api/auth/** → passes through without checking JWT (public routes)
- *   - All other paths → validates Bearer token from Authorization header
- *   - On valid token → extracts email and role, adds them as X-Auth-* headers for downstream services
- *   - On missing/invalid/expired token → returns 401 Unauthorized
+ *   - If the path starts with /api/auth/** -> passes through without checking JWT (public routes)
+ *   - All other paths -> validates Bearer token from Authorization header
+ *   - On valid token -> extracts email and role, adds them as X-Auth-* headers for downstream services
+ *   - On missing/invalid/expired token -> returns 401 Unauthorized
  *
  * The JWT secret MUST match the secret used in auth-service JwtUtil.
  */

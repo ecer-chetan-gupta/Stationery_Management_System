@@ -1,4 +1,4 @@
-# ── Config Server Dockerfile ───────────────────────────────────────────────────
+# -- Config Server Dockerfile ---------------------------------------------------
 # In Docker, we switch to 'native' profile so config-server reads from
 # classpath:/config/ (baked into the image). The git-based approach used
 # in local dev doesn't translate to Docker containers easily.

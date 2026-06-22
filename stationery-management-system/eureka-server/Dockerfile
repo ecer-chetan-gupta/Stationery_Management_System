@@ -1,4 +1,4 @@
-# ── Eureka Server Dockerfile ──────────────────────────────────────────────────
+# -- Eureka Server Dockerfile --------------------------------------------------
 # Stage 1: Build with Maven + JDK 17
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
@@ -21,7 +21,7 @@ COPY eureka-server/src eureka-server/src
 # Build (skip tests in CI build; tests run in separate Jenkins stage)
 RUN mvn -pl eureka-server package -DskipTests -B --no-transfer-progress
 
-# ── Stage 2: Minimal JRE runtime ──────────────────────────────────────────────
+# -- Stage 2: Minimal JRE runtime ----------------------------------------------
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 

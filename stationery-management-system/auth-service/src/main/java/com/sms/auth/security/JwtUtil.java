@@ -31,7 +31,7 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expirationMs;
 
-    // ─── Token Generation ─────────────────────────────────────────────────────
+    // --- Token Generation -----------------------------------------------------
 
     public String generateToken(User user) {
         Map<String, Object> extraClaims = new HashMap<>();
@@ -48,7 +48,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    // ─── Token Validation ─────────────────────────────────────────────────────
+    // --- Token Validation -----------------------------------------------------
 
     public boolean validateToken(String token, String email) {
         try {
@@ -70,7 +70,7 @@ public class JwtUtil {
         }
     }
 
-    // ─── Claims Extraction ────────────────────────────────────────────────────
+    // --- Claims Extraction ----------------------------------------------------
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -89,7 +89,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    // ─── Private Helpers ──────────────────────────────────────────────────────
+    // --- Private Helpers ------------------------------------------------------
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()

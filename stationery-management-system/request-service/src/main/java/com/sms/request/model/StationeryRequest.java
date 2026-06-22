@@ -48,7 +48,7 @@ public class StationeryRequest {
 
     public StationeryRequest() {}
 
-    // ─── Getters & Setters ────────────────────────────────────────────────────
+    // --- Getters & Setters ----------------------------------------------------
     public Long getId()                              { return id; }
     public void setId(Long id)                       { this.id = id; }
     public Long getStudentId()                       { return studentId; }

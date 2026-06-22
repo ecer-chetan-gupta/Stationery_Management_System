@@ -154,7 +154,7 @@ select.glass-input option {
     inset -1px -1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Dark Mode Utilities Global Overrides to Light Clay */
+/* Claymorphic component styling overrides */
 .bg-gray-950, [class*="bg-gray-950/"], [class*="bg-gray-900/"] {
   background-color: rgba(241, 245, 249, 0.6) !important;
   border: 2px solid rgba(255, 255, 255, 0.8) !important;

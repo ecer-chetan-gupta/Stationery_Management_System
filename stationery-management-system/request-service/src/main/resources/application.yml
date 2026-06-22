@@ -35,7 +35,7 @@ management:
       exposure:
         include: health,info
 
-# ─── Swagger / OpenAPI ────────────────────────────────────────────────────
+# --- Swagger / OpenAPI ----------------------------------------------------
 springdoc:
   api-docs:
     path: /v3/api-docs

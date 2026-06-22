@@ -95,7 +95,7 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- Compiler plugin: use 'release' for proper JDK 25 → Java 17 cross-compilation -->
+                <!-- Compiler plugin: use 'release' for proper JDK 25 -> Java 17 cross-compilation -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>

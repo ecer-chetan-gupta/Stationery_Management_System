@@ -43,7 +43,7 @@ public class StationeryItem {
 
     public enum Category { PAPER, PEN, PENCIL, NOTEBOOK, ERASER, OTHER }
 
-    // ─── No-arg constructor ────────────────────────────────────────────────────
+    // --- No-arg constructor ----------------------------------------------------
     public StationeryItem() {}
 
     public StationeryItem(Long id, String name, Category category, String unit,
@@ -59,7 +59,7 @@ public class StationeryItem {
         this.updatedAt = updatedAt;
     }
 
-    // ─── Builder ──────────────────────────────────────────────────────────────
+    // --- Builder --------------------------------------------------------------
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -87,7 +87,7 @@ public class StationeryItem {
         }
     }
 
-    // ─── Getters & Setters ────────────────────────────────────────────────────
+    // --- Getters & Setters ----------------------------------------------------
     public Long getId()                              { return id; }
     public void setId(Long id)                       { this.id = id; }
     public String getName()                          { return name; }

@@ -6,8 +6,8 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      # ─── Routes ───────────────────────────────────────────────────────────
-      # Each route: path prefix → microservice (load-balanced via Eureka)
+      # --- Routes -----------------------------------------------------------
+      # Each route: path prefix -> microservice (load-balanced via Eureka)
       routes:
         # Auth Service — public + authenticated auth endpoints
         - id: auth-service

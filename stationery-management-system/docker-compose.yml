@@ -13,7 +13,7 @@
 
 services:
 
-  # ── MySQL 8.0 ────────────────────────────────────────────────────────────────
+  # -- MySQL 8.0 ----------------------------------------------------------------
   mysql:
     image: mysql:8.0
     container_name: sms-mysql
@@ -35,7 +35,7 @@ services:
       retries: 10
       start_period: 30s
 
-  # ── Eureka Server ─────────────────────────────────────────────────────────────
+  # -- Eureka Server -------------------------------------------------------------
   eureka-server:
     build:
       context: .
@@ -53,7 +53,7 @@ services:
       retries: 8
       start_period: 30s
 
-  # ── Config Server ─────────────────────────────────────────────────────────────
+  # -- Config Server -------------------------------------------------------------
   config-server:
     build:
       context: .
@@ -77,7 +77,7 @@ services:
       retries: 8
       start_period: 30s
 
-  # ── API Gateway ───────────────────────────────────────────────────────────────
+  # -- API Gateway ---------------------------------------------------------------
   api-gateway:
     build:
       context: .
@@ -104,7 +104,7 @@ services:
       retries: 8
       start_period: 40s
 
-  # ── Auth Service ──────────────────────────────────────────────────────────────
+  # -- Auth Service --------------------------------------------------------------
   auth-service:
     build:
       context: .
@@ -137,7 +137,7 @@ services:
       retries: 8
       start_period: 60s
 
-  # ── Inventory Service ─────────────────────────────────────────────────────────
+  # -- Inventory Service ---------------------------------------------------------
   inventory-service:
     build:
       context: .
@@ -169,7 +169,7 @@ services:
       retries: 8
       start_period: 60s
 
-  # ── Request Service ───────────────────────────────────────────────────────────
+  # -- Request Service -----------------------------------------------------------
   request-service:
     build:
       context: .
@@ -201,7 +201,7 @@ services:
       retries: 8
       start_period: 60s
 
-  # ── Frontend (React + nginx) ──────────────────────────────────────────────────
+  # -- Frontend (React + nginx) --------------------------------------------------
   frontend:
     build:
       context: ./frontend
@@ -216,12 +216,12 @@ services:
       api-gateway:
         condition: service_healthy
 
-# ── Persistent Volumes ────────────────────────────────────────────────────────
+# -- Persistent Volumes --------------------------------------------------------
 volumes:
   mysql-data:
     driver: local
 
-# ── Docker Network ────────────────────────────────────────────────────────────
+# -- Docker Network ------------------------------------------------------------
 networks:
   sms-network:
     driver: bridge

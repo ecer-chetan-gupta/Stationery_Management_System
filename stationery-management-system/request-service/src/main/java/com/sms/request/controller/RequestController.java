@@ -21,9 +21,9 @@ import java.util.Map;
  * Base path: /api/requests
  *
  * Headers from Gateway (set by JwtAuthFilter after validation):
- *   X-Auth-User-Id    → Long studentId
- *   X-Auth-User-Email → String studentEmail
- *   X-Auth-User-Role  → "ADMIN" or "STUDENT"
+ *   X-Auth-User-Id    -> Long studentId
+ *   X-Auth-User-Email -> String studentEmail
+ *   X-Auth-User-Role  -> "ADMIN" or "STUDENT"
  */
 @RestController
 @RequestMapping("/api/requests")
@@ -38,7 +38,7 @@ public class RequestController {
         this.requestService = requestService;
     }
 
-    // ─── POST: Submit new request (STUDENT) ───────────────────────────────────
+    // --- POST: Submit new request (STUDENT) -----------------------------------
 
     @PostMapping
     @Operation(summary = "Submit a new stationery request (STUDENT)")
@@ -52,7 +52,7 @@ public class RequestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // ─── GET: My requests (STUDENT) ───────────────────────────────────────────
+    // --- GET: My requests (STUDENT) -------------------------------------------
 
     @GetMapping("/my")
     @Operation(summary = "Get my stationery requests (STUDENT)")
@@ -61,7 +61,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getMyRequests(studentId));
     }
 
-    // ─── GET: All requests (ADMIN) ────────────────────────────────────────────
+    // --- GET: All requests (ADMIN) --------------------------------------------
 
     @GetMapping
     @Operation(summary = "Get all stationery requests (ADMIN only)")
@@ -73,7 +73,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getAllRequests());
     }
 
-    // ─── GET: Single request by ID ────────────────────────────────────────────
+    // --- GET: Single request by ID --------------------------------------------
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a single request by ID")
@@ -81,7 +81,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.getById(id));
     }
 
-    // ─── PUT: Approve request (ADMIN) ─────────────────────────────────────────
+    // --- PUT: Approve request (ADMIN) -----------------------------------------
 
     @PutMapping("/{id}/approve")
     @Operation(summary = "Approve a request and deduct inventory (ADMIN only)")
@@ -94,7 +94,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.approveRequest(id));
     }
 
-    // ─── PUT: Reject request (ADMIN) ──────────────────────────────────────────
+    // --- PUT: Reject request (ADMIN) ------------------------------------------
 
     @PutMapping("/{id}/reject")
     @Operation(summary = "Reject a request with a comment (ADMIN only)")
@@ -109,7 +109,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.rejectRequest(id, adminComment));
     }
 
-    // ─── GET: Filter by status (ADMIN) ────────────────────────────────────────
+    // --- GET: Filter by status (ADMIN) ----------------------------------------
 
     @GetMapping("/status/{status}")
     @Operation(summary = "Get requests by status (ADMIN only)")

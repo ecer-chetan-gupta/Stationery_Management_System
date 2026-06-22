@@ -1,4 +1,4 @@
-# ── Frontend Dockerfile (React + Vite → nginx) ─────────────────────────────────
+# -- Frontend Dockerfile (React + Vite -> nginx) ---------------------------------
 # Stage 1: Build React app
 FROM node:20-alpine AS build
 WORKDIR /app
@@ -11,7 +11,7 @@ RUN npm ci --silent
 COPY . .
 RUN npm run build
 
-# ── Stage 2: Serve with nginx ──────────────────────────────────────────────────
+# -- Stage 2: Serve with nginx --------------------------------------------------
 FROM nginx:1.27-alpine
 
 # Remove default nginx config

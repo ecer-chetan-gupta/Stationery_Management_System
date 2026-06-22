@@ -41,7 +41,7 @@ public class StationeryController {
         this.stationeryService = stationeryService;
     }
 
-    // ─── GET: List all items (paginated) ──────────────────────────────────────
+    // --- GET: List all items (paginated) --------------------------------------
 
     @GetMapping
     @Operation(summary = "Get all stationery items (paginated)")
@@ -57,7 +57,7 @@ public class StationeryController {
         return ResponseEntity.ok(result);
     }
 
-    // ─── GET: Single item ─────────────────────────────────────────────────────
+    // --- GET: Single item -----------------------------------------------------
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a stationery item by ID")
@@ -65,7 +65,7 @@ public class StationeryController {
         return ResponseEntity.ok(stationeryService.getById(id));
     }
 
-    // ─── GET: Search by name ──────────────────────────────────────────────────
+    // --- GET: Search by name --------------------------------------------------
 
     @GetMapping("/search")
     @Operation(summary = "Search stationery items by name")
@@ -73,7 +73,7 @@ public class StationeryController {
         return ResponseEntity.ok(stationeryService.searchItems(q));
     }
 
-    // ─── GET: Low-stock alert (ADMIN) ─────────────────────────────────────────
+    // --- GET: Low-stock alert (ADMIN) -----------------------------------------
 
     @GetMapping("/low-stock")
     @Operation(summary = "Get low-stock items (ADMIN only)")
@@ -84,7 +84,7 @@ public class StationeryController {
         return ResponseEntity.ok(stationeryService.getLowStockItems());
     }
 
-    // ─── POST: Create item (ADMIN) ────────────────────────────────────────────
+    // --- POST: Create item (ADMIN) --------------------------------------------
 
     @PostMapping
     @Operation(summary = "Add a new stationery item (ADMIN only)")
@@ -98,7 +98,7 @@ public class StationeryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // ─── PUT: Update item (ADMIN) ─────────────────────────────────────────────
+    // --- PUT: Update item (ADMIN) ---------------------------------------------
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a stationery item (ADMIN only)")
@@ -112,7 +112,7 @@ public class StationeryController {
         return ResponseEntity.ok(stationeryService.updateItem(id, request));
     }
 
-    // ─── DELETE: Delete item (ADMIN) ──────────────────────────────────────────
+    // --- DELETE: Delete item (ADMIN) ------------------------------------------
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a stationery item (ADMIN only)")
@@ -126,7 +126,7 @@ public class StationeryController {
         return ResponseEntity.noContent().build();
     }
 
-    // ─── PUT: Deduct stock (internal Feign call from Request Service) ──────────
+    // --- PUT: Deduct stock (internal Feign call from Request Service) ----------
 
     @PutMapping("/{id}/deduct")
     @Operation(summary = "Deduct stock quantity (internal Feign call — no role check)")

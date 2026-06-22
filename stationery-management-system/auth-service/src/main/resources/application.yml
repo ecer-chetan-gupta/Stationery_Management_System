@@ -5,14 +5,14 @@ spring:
   application:
     name: auth-service
 
-  # ─── Database ─────────────────────────────────────────────────────────────
+  # --- Database -------------------------------------------------------------
   datasource:
     url: jdbc:mysql://localhost:3306/auth_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  # ─── JPA / Hibernate ──────────────────────────────────────────────────────
+  # --- JPA / Hibernate ------------------------------------------------------
   jpa:
     hibernate:
       ddl-auto: update        # Auto-creates/updates tables in dev (use validate in prod)
@@ -22,11 +22,11 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
 
-  # ─── Config Server (optional for local dev without config server) ─────────
+  # --- Config Server (optional for local dev without config server) ---------
   config:
     import: optional:configserver:http://localhost:8888
 
-# ─── Eureka ───────────────────────────────────────────────────────────────
+# --- Eureka ---------------------------------------------------------------
 eureka:
   client:
     service-url:
@@ -36,12 +36,12 @@ eureka:
     lease-expiration-duration-in-seconds: 15
     prefer-ip-address: true
 
-# ─── JWT (fallback if Config Server is not available) ─────────────────────
+# --- JWT (fallback if Config Server is not available) ---------------------
 jwt:
   secret: sms-super-secret-jwt-key-2024-capstone-project-secure
   expiration: 86400000   # 24 hours in milliseconds
 
-# ─── Swagger / OpenAPI ────────────────────────────────────────────────────
+# --- Swagger / OpenAPI ----------------------------------------------------
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -49,7 +49,7 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
 
-# ─── Actuator ─────────────────────────────────────────────────────────────
+# --- Actuator -------------------------------------------------------------
 management:
   endpoints:
     web:
@@ -59,7 +59,7 @@ management:
     health:
       show-details: always
 
-# ─── Logging ──────────────────────────────────────────────────────────────
+# --- Logging --------------------------------------------------------------
 logging:
   level:
     com.sms.auth: DEBUG

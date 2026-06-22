@@ -21,7 +21,7 @@ public class ItemResponse {
 
     public ItemResponse() {}
 
-    // ─── Factory method from entity ───────────────────────────────────────────
+    // --- Factory method from entity -------------------------------------------
     public static ItemResponse from(StationeryItem item) {
         ItemResponse dto = new ItemResponse();
         dto.id = item.getId();
@@ -36,7 +36,7 @@ public class ItemResponse {
         return dto;
     }
 
-    // ─── Getters & Setters ────────────────────────────────────────────────────
+    // --- Getters & Setters ----------------------------------------------------
     public Long getId()                              { return id; }
     public void setId(Long id)                       { this.id = id; }
     public String getName()                          { return name; }

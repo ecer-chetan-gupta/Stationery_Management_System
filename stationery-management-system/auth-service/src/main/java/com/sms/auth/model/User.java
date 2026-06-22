@@ -42,10 +42,10 @@ public class User {
 
     public enum Role { ADMIN, STUDENT }
 
-    // ─── No-arg constructor (required by JPA) ─────────────────────────────────
+    // --- No-arg constructor (required by JPA) ---------------------------------
     public User() {}
 
-    // ─── All-arg constructor ───────────────────────────────────────────────────
+    // --- All-arg constructor ---------------------------------------------------
     public User(Long id, String email, String password, String fullName,
                 Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
@@ -57,7 +57,7 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    // ─── Builder ──────────────────────────────────────────────────────────────
+    // --- Builder --------------------------------------------------------------
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
@@ -82,7 +82,7 @@ public class User {
         }
     }
 
-    // ─── Getters & Setters ────────────────────────────────────────────────────
+    // --- Getters & Setters ----------------------------------------------------
     public Long getId()                          { return id; }
     public void setId(Long id)                   { this.id = id; }
 
