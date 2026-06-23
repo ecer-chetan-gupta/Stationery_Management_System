@@ -20,16 +20,16 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: auth_db          # first DB; others auto-created by Spring
+      MYSQL_DATABASE: auth_db # first DB; others auto-created by Spring
     ports:
-      - "3307:3306"                    # Map to 3307 on host to avoid conflicts
+      - "3307:3306" # Map to 3307 on host to avoid conflicts
     volumes:
       - mysql-data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
       - sms-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p1234"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p1234" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -47,7 +47,7 @@ services:
     networks:
       - sms-network
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8
@@ -68,10 +68,11 @@ services:
     networks:
       - sms-network
     depends_on:
+      #firstly eureka server runs 
       eureka-server:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8888/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8888/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8
@@ -98,7 +99,7 @@ services:
       config-server:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8
@@ -131,7 +132,7 @@ services:
       config-server:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8
@@ -163,7 +164,7 @@ services:
       config-server:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8
@@ -195,7 +196,7 @@ services:
       inventory-service:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health | grep -q UP || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health | grep -q UP || exit 1" ]
       interval: 15s
       timeout: 5s
       retries: 8

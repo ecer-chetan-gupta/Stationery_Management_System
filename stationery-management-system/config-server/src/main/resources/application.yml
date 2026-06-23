@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8888 # config server runs on port 8888 by convention in Spring Cloud ecosystems
 
 spring:
   application:
@@ -9,21 +9,23 @@ spring:
       server:
         git:
           # Local Git repository — path to ~/sms-config folder
-          # Use forward slashes on Windows or 'file:///' prefix
+          # Use forward slashes on Windows or 'file:///' prefix. This is where YAML config files are fetched from.
           uri: file:///${user.home}/sms-config
           default-label: main
-          # Clone on start to fail fast if repo is missing
+          # Clone on start to fail fast if repo is missing (verifies configuration repository exists immediately on boot)
           clone-on-start: true
 
+# Monitoring endpoints exposure
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,env
+        include: health,info,env # env endpoint is useful for debugging variables loaded from Git
   endpoint:
     health:
       show-details: always
 
+# Disable verbose cloud logs to keep the console readable
 logging:
   level:
     org.springframework.cloud.config: INFO

@@ -7,6 +7,7 @@ spring:
 
   # --- Database -------------------------------------------------------------
   datasource:
+    # JDBC URL: connects to MySQL, automatically creating the auth_db database if it doesn't exist
     url: jdbc:mysql://localhost:3306/auth_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 1234
@@ -19,14 +20,15 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect # explicitly set MySQL 8 engine dialect
+        format_sql: true # pretty-prints SQL output in the console logs for readability
 
   # --- Config Server (optional for local dev without config server) ---------
+  # optional: prefix prevents service startup failure if Config Server isn't running locally
   config:
     import: optional:configserver:http://localhost:8888
 
-# --- Eureka ---------------------------------------------------------------
+# --- Eureka Client Settings ------------------------------------------------
 eureka:
   client:
     service-url:
@@ -34,7 +36,7 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 15
-    prefer-ip-address: true
+    prefer-ip-address: true # registers the service's IP instead of hostname (resolves docker network resolution issues)
 
 # --- JWT (fallback if Config Server is not available) ---------------------
 jwt:
@@ -54,14 +56,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics # exposes internal health checks and performance metrics for monitoring
   endpoint:
     health:
       show-details: always
 
-# --- Logging --------------------------------------------------------------
+# --- Logging Levels -------------------------------------------------------
 logging:
   level:
     com.sms.auth: DEBUG
     org.springframework.security: INFO
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: DEBUG # logs raw SQL statements for easier query troubleshooting

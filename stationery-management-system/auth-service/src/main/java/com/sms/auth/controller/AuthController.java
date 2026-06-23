@@ -50,6 +50,7 @@ public class AuthController {
     })
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Register request received for: {}", request.getEmail());
+        // service handles duplicate check, hashes password, and saves user
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -62,6 +63,7 @@ public class AuthController {
     })
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         log.info("Login request received for: {}", request.getEmail());
+        // authenticates, generates jwt token with user metadata, and returns it
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
@@ -69,6 +71,7 @@ public class AuthController {
     @GetMapping("/validate")
     @Operation(summary = "Validate a JWT token")
     public ResponseEntity<Map<String, String>> validate() {
+        // reads currently authenticated user details set by JwtAuthFilter
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(Map.of(
                 "status", "valid",
@@ -84,9 +87,10 @@ public class AuthController {
     })
     public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
         try {
-            String token = authHeader.substring(7);
-            String email = jwtUtil.extractEmail(token);
+            String token = authHeader.substring(7); // remove "Bearer " prefix
+            String email = jwtUtil.extractEmail(token); // parse email from token claims
 
+            // fetch user from database to ensure record still exists
             User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 

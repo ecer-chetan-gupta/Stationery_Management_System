@@ -22,9 +22,11 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
+                // disable csrf since api-gateway routes stateless api requests carrying jwt tokens
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .anyExchange().permitAll()  // JWT filter handles auth, not Spring Security
+                        // permit all requests at Spring Security level; actual auth is checked via JwtAuthFilter in the route definition
+                        .anyExchange().permitAll()
                 )
                 .build();
     }

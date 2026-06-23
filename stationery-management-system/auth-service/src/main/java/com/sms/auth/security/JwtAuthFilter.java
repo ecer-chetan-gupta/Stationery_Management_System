@@ -41,21 +41,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        // extract the auth header from incoming request
         final String authHeader = request.getHeader("Authorization");
 
+        // bearer token check; skip filter if header is missing or doesn't start with Bearer
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String jwt = authHeader.substring(7);
+        final String jwt = authHeader.substring(7); // strip "Bearer " prefix
 
         try {
             final String email = jwtUtil.extractEmail(jwt);
             final String role = jwtUtil.extractRole(jwt);
 
+            // if we have email and user is not yet authenticated in this request thread
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(jwt, email)) {
+                    // role must be prefixed with ROLE_ for spring security hasRole checks
                     List<SimpleGrantedAuthority> authorities = List.of(
                             new SimpleGrantedAuthority("ROLE_" + role)
                     );
@@ -67,6 +71,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
 
+                    // populate the context so subsequent filter/controller checks know who is logged in
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }

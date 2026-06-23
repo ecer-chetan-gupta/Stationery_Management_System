@@ -1,14 +1,20 @@
+// Declarative Jenkins Pipeline defining the CI flow
 pipeline {
+    // runs on any available agent node in the Jenkins cluster
     agent any
 
     options {
+        // keep only the last 5 builds to save disk space on Jenkins controller
         buildDiscarder(logRotator(numToKeepStr: '5'))
+        // kill the build if it gets stuck for more than 30 minutes
         timeout(time: 30, unit: 'MINUTES')
+        // prepend timestamp to each console log line
         timestamps()
     }
 
     stages {
 
+        // check if dependencies are available on the build node before starting
         stage('Verify Environment') {
             steps {
                 bat 'java -version'
@@ -16,6 +22,7 @@ pipeline {
             }
         }
 
+        // compiles, packages, and skips tests to speed up the initial jar generation
         stage('Build Project') {
             steps {
                 dir('stationery-management-system') {
@@ -24,6 +31,7 @@ pipeline {
             }
         }
 
+        // runs unit tests and parses results
         stage('Run Tests') {
             steps {
                 dir('stationery-management-system') {
@@ -32,6 +40,7 @@ pipeline {
             }
             post {
                 always {
+                    // publishes test result reports even if some tests failed
                     junit allowEmptyResults: true,
                           testResults: '**/target/surefire-reports/*.xml'
                 }
@@ -49,6 +58,7 @@ pipeline {
         }
 
         always {
+            // wipes workspace clean after execution to prevent accumulation of build artifacts
             cleanWs()
         }
     }

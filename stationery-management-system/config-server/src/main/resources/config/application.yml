@@ -3,24 +3,27 @@
 # In Docker mode, this is read from classpath:/config/
 # ============================================================
 
+# Secret key and token expiration for JWT authentication, distributed centrally to gateway and auth-service
 jwt:
   secret: sms-super-secret-jwt-key-2024-capstone-project-secure
   expiration: 86400000   # 24 hours in milliseconds
 
+# Service registration settings for Eureka registry client
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/ # inside Docker network, Eureka server hostname resolves to eureka-server
   instance:
-    lease-renewal-interval-in-seconds: 5
-    lease-expiration-duration-in-seconds: 15
+    lease-renewal-interval-in-seconds: 5 # heartbeats sent every 5 seconds to keep eureka dashboard updated in real-time
+    lease-expiration-duration-in-seconds: 15 # deregister service if no heartbeat is received within 15 seconds
     prefer-ip-address: true
 
+# Shared actuator monitoring configuration for downstream microservices
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics # metrics endpoint is exposed to fetch JVM statistics or HTTP request stats
   endpoint:
     health:
       show-details: always

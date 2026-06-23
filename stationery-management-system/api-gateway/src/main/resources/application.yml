@@ -1,3 +1,4 @@
+# port the api-gateway runs on; external traffic hits this port first
 server:
   port: 8080
 
@@ -9,23 +10,23 @@ spring:
       # --- Routes -----------------------------------------------------------
       # Each route: path prefix -> microservice (load-balanced via Eureka)
       routes:
-        # Auth Service — public + authenticated auth endpoints
+        # Auth Service — handles student/admin authentication and registration
         - id: auth-service
-          uri: lb://auth-service
+          uri: lb://auth-service # lb:// prefix tells gateway to resolve target instances from Eureka registry
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/auth/** # matches all incoming calls starting with /api/auth/
           filters:
-            - JwtAuthFilter   # applies our custom JWT filter
+            - JwtAuthFilter   # applies our custom JWT gateway filter to validate or forward headers
 
-        # Inventory Service — requires authentication
+        # Inventory Service — handles stationery catalogs and item updates
         - id: inventory-service
-          uri: lb://inventory-service
+          uri: lb://inventory-service # forwards load-balanced requests to instances of inventory-service
           predicates:
-            - Path=/api/inventory/**
+            - Path=/api/inventory/** # routes traffic starting with /api/inventory/
           filters:
-            - JwtAuthFilter
+            - JwtAuthFilter # ensures incoming request has a valid JWT token before forwarding
 
-        # Request Service — requires authentication
+        # Request Service — handles student requests and approval workflows
         - id: request-service
           uri: lb://request-service
           predicates:
@@ -33,25 +34,25 @@ spring:
           filters:
             - JwtAuthFilter
 
-      # Remove duplicate CORS headers that might come from downstream services
+      # Remove duplicate CORS headers that might come from downstream services to prevent browser cors errors
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 
-  # Config Server — fetch shared config (jwt.secret etc.)
+  # Config Server — fetches central configurations (like shared database credentials or jwt secrets)
   config:
     uri: http://localhost:8888
     fail-fast: false  # false so gateway can start even if config-server is down during dev
 
-# Eureka client registration
+# Eureka client registration parameters
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/ # endpoint where eureka server registers active microservices
   instance:
-    lease-renewal-interval-in-seconds: 5
+    lease-renewal-interval-in-seconds: 5 # registry gets heartbeat status every 5 seconds (useful for fast updates)
     lease-expiration-duration-in-seconds: 15
 
-# JWT secret — also loaded from Config Server; this is the fallback for standalone dev
+# Fallback JWT secret used if Config Server is unreachable during standalone test runs
 jwt:
   secret: sms-super-secret-jwt-key-2024-capstone-project-secure
 

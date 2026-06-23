@@ -1,5 +1,5 @@
 server:
-  port: 8761
+  port: 8761 # default port for Netflix Eureka service registry dashboard
 
 spring:
   application:
@@ -8,12 +8,13 @@ spring:
 eureka:
   client:
     # Standalone mode — do not register with itself or fetch from itself
+    # Since this is a single Eureka instance, register-with-eureka and fetch-registry are false to prevent it from looking for sibling registry nodes
     register-with-eureka: false
     fetch-registry: false
   server:
-    # Don't wait for peers on startup (standalone mode)
+    # Don't wait for peer replicas on startup (standalone mode)
     wait-time-in-ms-when-sync-empty: 0
-    # Reduce eviction interval for dev speed
+    # Evict dead services faster (every 5 seconds instead of 60 seconds default) for faster development/restart responsiveness
     eviction-interval-timer-in-ms: 5000
 
 management:

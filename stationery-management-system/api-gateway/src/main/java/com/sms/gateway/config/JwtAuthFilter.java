@@ -60,31 +60,32 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
             ServerHttpRequest request = exchange.getRequest();
             String path = request.getURI().getPath();
 
-            // Allow public paths through without JWT
+            // allow public paths (register/login) without token check
             if (isPublicPath(path)) {
                 return chain.filter(exchange);
             }
 
-            // Extract Authorization header
+            // extract the auth header from reactive request headers
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 log.warn("Missing or invalid Authorization header for path: {}", path);
                 return unauthorizedResponse(exchange, "Missing or invalid Authorization header");
             }
 
-            String token = authHeader.substring(7); // Remove "Bearer " prefix
+            String token = authHeader.substring(7); // strip "Bearer " prefix
 
             try {
-                // Parse and validate the JWT
+                // parse claims and validate signature/expiration
                 Claims claims = parseToken(token);
 
-                // Propagate user info to downstream services via custom headers
+                // mutate the incoming request to inject user details as headers for downstream microservices
                 ServerHttpRequest mutatedRequest = request.mutate()
                         .header("X-Auth-User-Email", claims.getSubject())
                         .header("X-Auth-User-Role", claims.get("role", String.class))
                         .header("X-Auth-User-Id", String.valueOf(claims.get("userId")))
                         .build();
 
+                // forward request with the newly added headers down the filter chain
                 return chain.filter(exchange.mutate().request(mutatedRequest).build());
 
             } catch (ExpiredJwtException e) {

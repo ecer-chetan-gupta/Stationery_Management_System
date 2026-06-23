@@ -29,17 +29,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                // csrf disabled because we use stateless jwt tokens (no session cookies, so no csrf risk)
                 .csrf(AbstractHttpConfigurer::disable)
+                // tell spring security not to manage session states on the server side
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // Gateway enforces JWT — service trusts the gateway
+                        // let all requests through; the api-gateway filters jwt and forwards role headers
+                        .anyRequest().permitAll()
                 )
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // bcrypt hashes passwords securely using a random salt internally
         return new BCryptPasswordEncoder();
     }
 }

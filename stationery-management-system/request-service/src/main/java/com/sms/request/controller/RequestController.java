@@ -44,6 +44,7 @@ public class RequestController {
     @Operation(summary = "Submit a new stationery request (STUDENT)")
     public ResponseEntity<?> submit(
             @Valid @RequestBody SubmitRequestDTO dto,
+            // gateway sets these custom headers after parsing the user's jwt token
             @RequestHeader(value = "X-Auth-User-Id", defaultValue = "0") Long studentId,
             @RequestHeader(value = "X-Auth-User-Email", defaultValue = "") String studentEmail,
             @RequestHeader(value = "X-Auth-User-Role", defaultValue = "") String role) {
@@ -67,6 +68,7 @@ public class RequestController {
     @Operation(summary = "Get all stationery requests (ADMIN only)")
     public ResponseEntity<?> getAllRequests(
             @RequestHeader(value = "X-Auth-User-Role", defaultValue = "") String role) {
+        // manual role check since the underlying Spring Security config is set to permitAll()
         if (!"ADMIN".equals(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
         }
@@ -91,6 +93,7 @@ public class RequestController {
         if (!"ADMIN".equals(role)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Admin access required");
         }
+        // service method will trigger a Feign client call to inventory-service to deduct stock
         return ResponseEntity.ok(requestService.approveRequest(id));
     }
 

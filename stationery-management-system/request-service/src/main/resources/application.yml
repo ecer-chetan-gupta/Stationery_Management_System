@@ -1,34 +1,39 @@
 server:
-  port: 8083
+  port: 8083 # Port mapping for request-service
+
 spring:
   application:
     name: request-service
   datasource:
+    # JDBC URL: connects to local MySQL instance, automatically creating request_db database if missing
     url: jdbc:mysql://localhost:3306/request_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # syncs the database tables with our StationeryRequest and RequestItem JPA entity classes
     show-sql: true
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888 # downloads shared configurations from config-server
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/ # registers this service with the eureka service registry
   instance:
     lease-renewal-interval-in-seconds: 5
 jwt:
   secret: sms-super-secret-jwt-key-2024-capstone-project-secure
   expiration: 86400000
+
+# --- Feign Client Settings ------------------------------------------------
+# Configures network timeout limits for microservice-to-microservice communication
 feign:
   client:
     config:
       default:
-        connectTimeout: 5000
-        readTimeout: 5000
+        connectTimeout: 5000 # time allowed to establish connection with inventory-service (5 seconds)
+        readTimeout: 5000    # time allowed to wait for inventory-service response payload (5 seconds)
 management:
   endpoints:
     web:
@@ -36,6 +41,7 @@ management:
         include: health,info
 
 # --- Swagger / OpenAPI ----------------------------------------------------
+# Swagger API spec endpoints (useful to directly test the service endpoints in isolation)
 springdoc:
   api-docs:
     path: /v3/api-docs

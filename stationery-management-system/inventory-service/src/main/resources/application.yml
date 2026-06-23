@@ -1,23 +1,25 @@
 server:
-  port: 8082
+  port: 8082 # Port mapping for inventory-service
+
 spring:
   application:
     name: inventory-service
   datasource:
+    # JDBC URL: connects to local MySQL instance, automatically creating inventory_db database if missing
     url: jdbc:mysql://localhost:3306/inventory_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # syncs the database tables with our StationeryItem JPA entity classes
     show-sql: true
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888 # downloads unified environment settings from config-server
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8761/eureka/ # registers this service with the eureka service registry
   instance:
     lease-renewal-interval-in-seconds: 5
 jwt:
@@ -30,6 +32,7 @@ management:
         include: health,info
 
 # --- Swagger / OpenAPI ----------------------------------------------------
+# Swagger API spec endpoints (useful to directly test the service endpoints in isolation)
 springdoc:
   api-docs:
     path: /v3/api-docs
